@@ -1,7 +1,6 @@
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.Toolkit;
@@ -89,10 +88,14 @@ public class TrafficAnimation extends JPanel
 		g.setColor(Color.white);
 		g.fillOval(width/3,  height/ 2 + height/4, height/12, height/12);
 		g.drawLine(width/3 + 16,  height/ 2 + height/4 + 16, width/3 + 16, height/ 2 + height/3 + 16);
-		
-		
+		g.setColor(Color.gray);
+		g.fillOval(xOffset, squareY + (squareSide), squareSide/3, squareSide/3);
+		g.fillOval(xOffset + squareSide - squareSide/3, squareY + (squareSide), squareSide/3, squareSide/3);
+		g.fillOval(xOffset2, squareY- height/6 + (squareSide), squareSide/3, squareSide/3);
+
 		// Put your code above this line. This makes the drawing smoother.
 		Toolkit.getDefaultToolkit().sync();
+		
 	}
 
 
