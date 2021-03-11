@@ -1,10 +1,11 @@
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.Toolkit;
-
+import java.awt.*;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -44,6 +45,7 @@ public class TrafficAnimation extends JPanel
 	 */
 	private int stepSize = 10;
 
+	//custom background green color
 	private final Color BACKGROUND_COLOR = new Color(100, 221, 40);
 
 	/* This method draws on the panel's Graphics context.
@@ -57,45 +59,81 @@ public class TrafficAnimation extends JPanel
 		// Get the current width and height of the window.
 		int width = getWidth(); // panel width
 		int height = getHeight(); // panel height
-        // Fill the graphics page with the background color.
 
+        // Fill the graphics page with the background color.
 		g.setColor(BACKGROUND_COLOR);
         g.fillRect(0, 0, width, height);
-        
+		
+		//drawing the road
         g.setColor(Color.black);
         g.fillRect(0, (height/3), width, (height/3));
-
+		
+		//drawing the center line
         g.setColor(Color.yellow);
         g.drawLine(0, (height/3) + height/6, width, (height/3) + height/6);
         g.drawLine(0, (height/3) + height/6 + 1, width, (height/3) + height/6 +1);
         g.drawLine(0, (height/3) + height/6 - 1, width, (height/3) + height/6 - 1);
 		// Calculate the new xOffset position of the moving object.
+		int carHeight = height / 9;
+		int carWidth = width / 5;
 		xOffset  = (xOffset + stepSize) % (width);
 
+		//The x offset for the car traveling in the opposite direction.
 		xOffset2 = (xOffset2 - stepSize) % width;
 
 		// TODO: Use width, height, and xOffset to draw your scalable objects
 		// at their new positions on the screen
 
-		// This draws a green square. Replace it with your own object.
-		int squareSide = height / 7;
-		int squareY = height / 2 + height/14 - squareSide / 2;
+		// This draws a red and blue rectangle that is the body for the cars
+
+		int carY = height / 2 + height/14 - carHeight / 2;
 		
 		g.setColor(Color.red);
-		g.fillRect(xOffset, squareY, squareSide, squareSide);
-		g.fillRect(xOffset2 + width, squareY - height/6, squareSide, squareSide);
-		
-		g.setColor(Color.white);
-		g.fillOval(width/3,  height/ 2 + height/4, height/12, height/12);
-		g.drawLine(width/3 + 16,  height/ 2 + height/4 + 16, width/3 + 16, height/ 2 + height/3 + 16);
-		g.setColor(Color.gray);
-		g.fillOval(xOffset, squareY + (squareSide), squareSide/3, squareSide/3);
-		g.fillOval(xOffset + squareSide - squareSide/3, squareY + (squareSide), squareSide/3, squareSide/3);
-		g.fillOval(xOffset2, squareY- height/6 + (squareSide), squareSide/3, squareSide/3);
+		g.fillRect(xOffset, carY, carWidth, carHeight);
+		g.setColor(Color.blue);
+		g.fillRect(xOffset2 + width, carY - height/6, carWidth, carHeight);
 
+		//drawing the wheels for the cars and basing them off of the x offset
+		g.setColor(Color.gray);
+		g.fillOval(xOffset, carY + (carHeight), carHeight/3, carHeight/3);
+		g.fillOval(xOffset + carWidth - carHeight/3, carY + (carHeight), carHeight/3, carHeight/3);
+		g.fillOval(xOffset2 + width, carY- height/6 + (carHeight), carHeight/3, carHeight/3);
+		g.fillOval(xOffset2 + width + carWidth - carHeight/3, carY- height/6 + (carHeight), carHeight/3, carHeight/3);
+		
+
+		//drawing the observer
+		int size = Math.min(height, width);
+		int headSize = size/14;
+		int manWidth = size/100;
+		int manHeight = size/8;
+		int headY = height/2 + height/4;
+		g.setColor(Color.white);
+		//drawing the observers head
+		g.fillOval(width/3,  headY, headSize, headSize);
+		//drawing the observers body
+		g.fillRect(width/3 + (headSize/2 - manWidth/3),  headY + headSize/2, manWidth, manHeight);
+		//drawing the observers arms
+		int armLength = manWidth * 8;
+		g.fillRect(width/3, headY + 4* headSize/3, armLength, manWidth);
+		//drawing the observers hips + legs
+		int hipY = height/2 + height/4 + headSize/2 + manHeight;
+		int hipLength = manWidth * 6;
+		int hipX = width/3 + manWidth;
+		g.fillRect(hipX, hipY, hipLength, manWidth);
+		int legY = hipY + manWidth;
+		g.fillRect(hipX, legY, manWidth, manHeight/4);
+		int leg2X = hipX + hipLength - manWidth;
+		g.fillRect(leg2X, legY, manWidth, manHeight/4);
+		
+
+		//Adding some text to one of the cars
+		int textSize = (carHeight+carWidth)/2;
+		g.setFont(new Font("Arial", Font.BOLD, textSize/6));
+		g.drawString("GOT MILK?", xOffset + carWidth/6, carY + carHeight/3);
+
+		
 		// Put your code above this line. This makes the drawing smoother.
 		Toolkit.getDefaultToolkit().sync();
-		
 	}
 
 
